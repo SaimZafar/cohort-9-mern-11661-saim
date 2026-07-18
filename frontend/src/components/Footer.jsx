@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="footer">
       <div className="container footer-inner">
         <div className="footer-brand">
-          <span className="navbar-logo-mark">S</span>
+          <img src="/logo-mark.svg" alt="Scribe logo" className="navbar-logo-img" />
           <span>Scribe</span>
         </div>
         <p className="footer-text">

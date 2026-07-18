@@ -763,3 +763,8 @@ button {
   border-color: hsl(var(--primary));
   box-shadow: 0 0 0 3px hsl(var(--primary) / 0.12);
 }
+.navbar-logo-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}

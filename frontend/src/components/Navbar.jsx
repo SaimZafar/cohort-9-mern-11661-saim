@@ -14,9 +14,9 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="container navbar-inner">
         <Link to="/" className="navbar-logo">
-          <span className="navbar-logo-mark">S</span>
-          <span>Scribe</span>
-        </Link>
+  <img src="/logo-mark.svg" alt="Scribe logo" className="navbar-logo-img" />
+  <span>Scribe</span>
+</Link>
 
         <div className="navbar-actions">
           {isAuthenticated ? (
