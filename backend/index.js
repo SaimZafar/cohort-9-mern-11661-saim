@@ -9,8 +9,10 @@ const authRoutes = require('./routes/authRoutes');
 const noteRoutes = require('./routes/noteRoutes');
 
 const app = express();
-
-app.use(cors());
+app.disable('x-powered-by');
+app.use(cors({
+origin: process.env.CORS_ORIGIN || '*',
+}));
 app.use(express.json());
 app.use(pinoHttp({ logger })); // logs every incoming request/response
 
