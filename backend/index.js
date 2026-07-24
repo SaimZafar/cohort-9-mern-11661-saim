@@ -12,11 +12,18 @@ if (!process.env.JWT_SECRET) {
   throw new Error('Missing required environment variable: JWT_SECRET');
 }
 
+/** @type {import('express').Express} */
 const app = express();
 
 app.disable('x-powered-by');
+const isProduction = process.env.NODE_ENV === 'production';
+
+if (isProduction && !process.env.CORS_ORIGIN) {
+  throw new Error('Missing required environment variable: CORS_ORIGIN (required in production)');
+}
+
 app.use(cors({
-origin: process.env.CORS_ORIGIN || '*',
+  origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
 }));
 app.use(express.json());
 app.use(
@@ -39,7 +46,12 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRoutes);
 
-// Catch requests to routes that don't exist
+/**
+ * Catch requests to routes that don't exist.
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ */
 app.use((req, res, next) => {
   res.status(404).json({ success: false, message: 'Route not found' });
 });
