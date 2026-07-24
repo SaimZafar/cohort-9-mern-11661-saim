@@ -19,9 +19,8 @@ const pool = mysql.createPool({
   database: /** @type {string} */ (process.env.DB_NAME),
   waitForConnections: true,
   connectionLimit: 10,
-  queueLimit: 0,
+  queueLimit: 30,
 });
-
 pool.getConnection()
   .then((conn) => {
     logger.info('MySQL connected successfully');
