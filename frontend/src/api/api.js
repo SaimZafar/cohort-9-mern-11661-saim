@@ -1,5 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api';
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 // Reads the saved token (if any) and builds request options with the
 // Authorization header automatically attached. Every function below
 // funnels through this so we only write the auth-header logic once.

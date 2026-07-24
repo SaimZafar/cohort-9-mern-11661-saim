@@ -20,7 +20,16 @@ async function signup(req, res, next) {
     }
 
     const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-    const user = await createUser(name, email, hashedPassword);
+
+    let user;
+    try {
+      user = await createUser(name, email, hashedPassword);
+    } catch (dbErr) {
+      if (dbErr.code === 'ER_DUP_ENTRY') {
+        throw new AppError('Email already in use', 409);
+      }
+      throw dbErr;
+    }
 
     logger.info({ userId: user.id }, 'New user signed up');
 

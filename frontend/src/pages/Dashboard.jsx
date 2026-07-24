@@ -3,6 +3,12 @@ import { Link } from 'react-router-dom';
 import { getNotes } from '../api/api';
 import NoteCard from '../components/NoteCard';
 
+// Strips HTML tags so search matches visible text, not markup
+function stripHtml(html) {
+  const doc = new DOMParser().parseFromString(html || '', 'text/html');
+  return doc.body.textContent || '';
+}
+
 export default function Dashboard() {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -31,7 +37,7 @@ export default function Dashboard() {
     }
     return notes.filter((note) => {
       const titleMatch = note.title?.toLowerCase().includes(term);
-      const contentMatch = note.content?.toLowerCase().includes(term);
+      const contentMatch = stripHtml(note.content).toLowerCase().includes(term);
       return titleMatch || contentMatch;
     });
   }, [notes, searchTerm]);

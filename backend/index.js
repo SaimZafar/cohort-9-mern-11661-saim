@@ -8,14 +8,30 @@ const { errorHandler } = require('./middleware/errorHandler');
 const authRoutes = require('./routes/authRoutes');
 const noteRoutes = require('./routes/noteRoutes');
 
+if (!process.env.JWT_SECRET) {
+  throw new Error('Missing required environment variable: JWT_SECRET');
+}
+
 const app = express();
+
 app.disable('x-powered-by');
 app.use(cors({
 origin: process.env.CORS_ORIGIN || '*',
 }));
 app.use(express.json());
-app.use(pinoHttp({ logger })); // logs every incoming request/response
-
+app.use(
+  pinoHttp({
+    logger,
+    redact: {
+      paths: [
+        'req.headers.authorization',
+        'req.headers.cookie',
+        'res.headers["set-cookie"]',
+      ],
+      censor: '[Redacted]',
+    },
+  })
+); // logs every incoming request/response, with sensitive headers redacted
 app.get('/', (req, res) => {
   res.send('Notes App backend is running');
 });

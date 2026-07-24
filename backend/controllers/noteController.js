@@ -49,12 +49,20 @@ async function update(req, res, next) {
   try {
     const { title, content } = req.body;
 
+    if (!title || !title.trim()) {
+      throw new AppError('Title is required', 400);
+    }
+
     const existing = await getNoteById(req.params.id, req.user.id);
     if (!existing) {
       throw new AppError('Note not found', 404);
     }
 
     const note = await updateNote(req.params.id, req.user.id, title, content);
+    if (!note) {
+      throw new AppError('Note not found', 404);
+    }
+
     logger.info({ userId: req.user.id, noteId: note.id }, 'Note updated');
 
     res.status(200).json({ success: true, note });
