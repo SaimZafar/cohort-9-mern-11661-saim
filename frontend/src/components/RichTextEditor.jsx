@@ -1,33 +1,27 @@
 import { useRef, useEffect } from 'react';
-
+import PropTypes from 'prop-types';
 export default function RichTextEditor({ value, onChange }) {
   const editorRef = useRef(null);
   const isFirstRender = useRef(true);
-
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== value) {
       editorRef.current.innerHTML = value || '';
     }
     isFirstRender.current = false;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
-
   function handleInput() {
     onChange(editorRef.current.innerHTML);
   }
-
   function format(command) {
     document.execCommand(command, false, null); // NOSONAR - no modern replacement for this simple use case
     editorRef.current.focus();
     handleInput();
   }
-
   function formatList(type) {
     document.execCommand(type, false, null); // NOSONAR - no modern replacement for this simple use case
     editorRef.current.focus();
     handleInput();
   }
-
   return (
     <div className="rich-editor">
       <div className="rich-editor-toolbar">
@@ -67,3 +61,7 @@ export default function RichTextEditor({ value, onChange }) {
     </div>
   );
 }
+RichTextEditor.propTypes = {
+  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+};
