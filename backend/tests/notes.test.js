@@ -1,30 +1,28 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../index');
-
 chai.use(chaiHttp);
 const { expect } = chai;
-
 describe('Notes API', () => {
   const testUser = {
     name: 'Notes Tester',
     email: `notes${Date.now()}@example.com`,
     password: 'password123',
   };
-
   let token;
   let createdNoteId;
-
-  before((done) => {
-    chai.request(app)
-      .post('/api/auth/signup')
-      .send(testUser)
-      .end((err, res) => {
-        token = res.body.token;
-        done();
-      });
-  });
-
+before((done) => {
+  chai.request(app)
+    .post('/api/auth/signup')
+    .send(testUser)
+    .end((err, res) => {
+      if (err || res.status !== 201 || !res.body.token) {
+        return done(new Error(`Test setup failed: signup did not return a token (status ${res?.status})`));
+      }
+      token = res.body.token;
+      done();
+    });
+});
   it('should reject requests without a token', (done) => {
     chai.request(app)
       .get('/api/notes')
@@ -33,7 +31,6 @@ describe('Notes API', () => {
         done();
       });
   });
-
   it('should create a note', (done) => {
     chai.request(app)
       .post('/api/notes')
@@ -46,7 +43,6 @@ describe('Notes API', () => {
         done();
       });
   });
-
   it('should fetch all notes for the user', (done) => {
     chai.request(app)
       .get('/api/notes')
@@ -57,7 +53,6 @@ describe('Notes API', () => {
         done();
       });
   });
-
   it('should update a note', (done) => {
     chai.request(app)
       .put(`/api/notes/${createdNoteId}`)
@@ -69,7 +64,6 @@ describe('Notes API', () => {
         done();
       });
   });
-
   it('should delete a note', (done) => {
     chai.request(app)
       .delete(`/api/notes/${createdNoteId}`)
