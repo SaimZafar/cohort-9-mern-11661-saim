@@ -3,35 +3,41 @@ import * as api from '../api/api';
 const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
   function isValidUser(value) {
-  return (
-    value !== null &&
-    typeof value === 'object' &&
-    !Array.isArray(value) &&
-    typeof value.id !== 'undefined' &&
-    typeof value.email === 'string'
-  );
-}
-function clearStoredSession() {
-  try {
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
-  } catch {  }
-}
-const [user, setUser] = useState(() => {
-  try {
-    const savedUser = localStorage.getItem('user');
-    if (!savedUser) return null;
-    const parsed = JSON.parse(savedUser);
-    if (!isValidUser(parsed)) {
+    return (
+      value !== null &&
+      typeof value === 'object' &&
+      !Array.isArray(value) &&
+      typeof value.id !== 'undefined' &&
+      typeof value.email === 'string'
+    );
+  }
+  function clearStoredSession() {
+    try {
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
+    } catch {
+      /* storage unavailable, nothing more to do */
+    }
+  }
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('user');
+      const savedToken = localStorage.getItem('token');
+      if (!savedUser || !savedToken) {
+        clearStoredSession();
+        return null;
+      }
+      const parsed = JSON.parse(savedUser);
+      if (!isValidUser(parsed)) {
+        clearStoredSession();
+        return null;
+      }
+      return parsed;
+    } catch {
       clearStoredSession();
       return null;
     }
-    return parsed;
-  } catch {
-    clearStoredSession();
-    return null;
-  }
-});
+  });
   function saveSession(data) {
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(data.user));
