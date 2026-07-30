@@ -2,13 +2,33 @@ import { createContext, useContext, useState, useMemo } from 'react';
 import * as api from '../api/api';
 const AuthContext = createContext(null);
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
+  function isValidUser(value) {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    typeof value.id !== 'undefined' &&
+    typeof value.email === 'string'
+  );
+}
+function clearStoredSession() {
   try {
-    const savedUser = localStorage.getItem('user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  } catch {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+  } catch {  }
+}
+const [user, setUser] = useState(() => {
+  try {
+    const savedUser = localStorage.getItem('user');
+    if (!savedUser) return null;
+    const parsed = JSON.parse(savedUser);
+    if (!isValidUser(parsed)) {
+      clearStoredSession();
+      return null;
+    }
+    return parsed;
+  } catch {
+    clearStoredSession();
     return null;
   }
 });
