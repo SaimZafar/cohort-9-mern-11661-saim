@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 <img src="frontend/public/logo.svg" alt="Scribe logo" width="120" />
 
@@ -13,7 +13,6 @@
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tests](https://img.shields.io/badge/tests-27%20passing-brightgreen)](#testing)
 [![SonarQube](https://img.shields.io/badge/SonarQube-Quality%20Gate%20Passed-4E9BCD?logo=sonarqube&logoColor=white)](#code-quality)
-[![License](https://img.shields.io/badge/license-MIT-blue)](#license)
 
 Built for the **10Pearls Shine Internship Program** - Cohort 9, MERN track
 
@@ -35,7 +34,6 @@ Built for the **10Pearls Shine Internship Program** - Cohort 9, MERN track
 - [Code quality](#code-quality)
 - [Screens](#screens)
 - [Author](#author)
-- [License](#license)
 
 ---
 
@@ -49,15 +47,15 @@ Scribe is a full-stack notes application where every user gets a private, authen
 
 | Feature | Description |
 |---|---|
-| 🔐 **Authentication** | Sign up, log in, log out. Passwords hashed with bcrypt; sessions handled via signed JWTs with 7-day expiry. |
-| 📝 **Rich text notes** | Create, edit, and delete notes with bold, italic, underline, and list formatting. |
-| 🔒 **Per-user privacy** | Every note is scoped to its owner at the database query level - not just hidden in the UI. |
-| 🔍 **Search & filter** | Instantly filter notes by title or visible content from the dashboard. |
-| 📋 **Structured logging** | Every HTTP request/response and key event (signup, login, note CRUD) logged via Pino, with sensitive headers redacted. |
-| ⚠️ **Global error handling** | One centralized middleware catches and formats every error consistently, with proper HTTP status codes. |
-| 👤 **Profile page** | View account details and log out. |
-| ✅ **Fully tested** | 9 backend tests (Mocha/Chai) + 18 frontend tests (Jest) - 27 total, all passing. |
-| 🧹 **Static analysis** | Both backend and frontend pass a clean SonarQube Quality Gate. |
+| **Authentication** | Sign up, log in, log out. Passwords hashed with bcrypt; sessions handled via signed JWTs with 7-day expiry. |
+| **Rich text notes** | Create, edit, and delete notes with bold, italic, underline, and list formatting. |
+| **Per-user privacy** | Every note is scoped to its owner at the database query level - not just hidden in the UI. |
+| **Search & filter** | Instantly filter notes by title or visible content from the dashboard. |
+| **Structured logging** | Every HTTP request/response and key event (signup, login, note CRUD) logged via Pino, with sensitive headers redacted. |
+| **Global error handling** | One centralized middleware catches and formats every error consistently, with proper HTTP status codes. |
+| **Profile page** | View account details and log out. |
+| **Fully tested** | 9 backend tests (Mocha/Chai) + 18 frontend tests (Jest) - 27 total, all passing. |
+| **Static analysis** | Both backend and frontend pass a clean SonarQube Quality Gate. |
 
 ## Tech stack
 
@@ -91,7 +89,7 @@ Scribe is a full-stack notes application where every user gets a private, authen
 ## Architecture
 
 ```text
-┌─────────────┐        HTTPS/JSON        ┌──────────────┐        SQL        ┌───────────┐
+┌─────────────┐        HTTP/JSON         ┌──────────────┐        SQL        ┌───────────┐
 │   React     │  ───────────────────▶    │   Express    │  ───────────────▶ │   MySQL   │
 │  (Vite)     │  ◀───────────────────    │   REST API   │  ◀─────────────── │           │
 │ :5173       │      JWT in header       │  :5000       │                   │  :3306    │
@@ -104,6 +102,8 @@ Scribe is a full-stack notes application where every user gets a private, authen
                                           │  log files)  │
                                           └──────────────┘
 ```
+
+> Locally, this runs over plain HTTP (`http://localhost:...`). HTTPS would apply once deployed behind a reverse proxy or hosting platform that terminates TLS.
 
 **Request flow example - creating a note:**
 
@@ -150,6 +150,7 @@ cohort-9-mern-11661-saim/
     ├── public/
     │   ├── logo.svg
     │   └── logo-mark.svg
+    ├── .env.example
     └── src/
         ├── api/
         │   └── api.js               # Centralized backend calls
@@ -217,6 +218,8 @@ npm start
 
 ### 3. Frontend setup
 
+Open a new terminal at the repository root (the backend needs to keep running in its own terminal), then:
+
 ```bash
 cd frontend
 npm install
@@ -226,7 +229,7 @@ npm run dev
 
 ➡️ Runs on **http://localhost:5173**
 
-Both servers need to be running simultaneously for the app to work.
+Both servers need to be running simultaneously, each in its own terminal, for the app to work.
 
 ## Environment variables
 
