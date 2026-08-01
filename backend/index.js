@@ -55,9 +55,14 @@ async function startServer() {
     const conn = await pool.getConnection();
     conn.release();
     logger.info('MySQL connected successfully');
-    app.listen(PORT, () => {
-      logger.info(`Server running on port ${PORT}`);
-    });
+    const server = app.listen(PORT, () => {
+  logger.info(`Server running on port ${PORT}`);
+});
+
+server.on('error', (err) => {
+  logger.error({ err }, `Failed to start server on port ${PORT}`);
+  process.exit(1);
+});
   } catch (err) {
     logger.error({ err }, 'Failed to connect to MySQL — server will not start');
     process.exit(1);

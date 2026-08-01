@@ -10,7 +10,7 @@ const logger = require('../utils/logger');
 async function create(req, res, next) {
   try {
     const { title, content } = req.body;
-    if (!title || !title.trim()) {
+    if (!title || typeof title !== 'string' || !title.trim()) {
       throw new AppError('Title is required', 400);
     }
 
@@ -43,7 +43,7 @@ async function getOne(req, res, next) {
 async function update(req, res, next) {
   try {
     const { title, content } = req.body;
-    if (!title || !title.trim()) {
+    if (!title || typeof title !== 'string' || !title.trim()) {
       throw new AppError('Title is required', 400);
     }
     const existing = await getNoteById(req.params.id, req.user.id);
